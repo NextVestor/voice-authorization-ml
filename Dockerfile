@@ -1,15 +1,3 @@
-# FROM python:3.7-slim
-# WORKDIR /code
-# ENV FLASK_APP=app.py
-# ENV FLASK_RUN_HOST=0.0.0.0
-# RUN apk add --no-cache gcc musl-dev linux-headers openblas-dev musl-dev g++ python3.7-dev
-# COPY requirements.txt requirements.txt
-# # RUN pip install --upgrade pkg-config
-# RUN pip install -r requirements.txt
-# EXPOSE 5000
-# COPY . .
-# CMD ["flask", "run"]
-
 FROM ubuntu:18.04
 WORKDIR /code
 ENV DEBIAN_FRONTEND=noninteractive 

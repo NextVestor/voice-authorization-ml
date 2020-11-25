@@ -8,7 +8,7 @@
 
 librosa
 numpy
-# matplotlib==2.2.4
+matplotlib==2.2.4
 # matplotlib
 spafe==0.1.2
 resemblyzer==0.1.1.dev0

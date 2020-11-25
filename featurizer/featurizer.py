@@ -35,9 +35,9 @@ class AudioFeaturizer():
     def read_file_by_url(self, url, sample_rate=16000):
         z = io.BytesIO(urlopen(url).read())
         temp_path = f'./{str(uuid.uuid4())}.wav'
-        Path(temp_path).write_bytes(z.getbuffer())
+        temp_file = Path(temp_path).write_bytes(z.getbuffer())
         record, sample_rate = librosa.load(temp_path, sr=sample_rate)
-        Path.unlink(temp_path)
+        Path(temp_path).unlink()
         # TODO: choose logic/add method for DTLN processing
         return record, sample_rate
     
@@ -66,7 +66,7 @@ class AudioFeaturizer():
             'lfcc': self.get_lfcc(record, sample_rate),
             'mfcc': self.get_mfcc(record, sample_rate),
             'pncc': self.get_pncc(record, sample_rate),
-            'd_vector': self.get_d_vector(record)
+            'd_vector': self.get_d_vector(record, sample_rate)
         }
         
         if normalize_dim:
@@ -108,4 +108,9 @@ class AudioFeaturizer():
         sum_sim = d_sim*self.d_weight + lfcc_sim*self.lfcc_weight + pncc_sim*self.pncc_weight + mfcc_sim*self.mfcc_weight
         # TODO: scale sim based on weights
         return sum_sim
+
+    def features_to_json_serializable(self, all_features):
+        for feature_name in all_features:
+            all_features[feature_name] = all_features[feature_name].tolist()
+        return all_features
         

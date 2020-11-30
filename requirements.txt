@@ -4,3 +4,4 @@ matplotlib==2.2.4
 spafe==0.1.2
 resemblyzer==0.1.1.dev0
 flask==1.1.1
+tensorflow==2.3.1

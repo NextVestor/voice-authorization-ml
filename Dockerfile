@@ -16,4 +16,5 @@ EXPOSE 5000
 COPY . .
 ENV LC_ALL=C.UTF-8
 ENV LANG=C.UTF-8
-CMD ["flask", "run"]
+RUN make html
+# CMD ["flask", "run"]

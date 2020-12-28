@@ -1,6 +1,13 @@
 version: "3.8"
 services:
   api:
+    image: base
     build: .
     ports:
       - "5000:5000"
+    command: flask run
+  sphinx:
+    image: base
+    ports:
+      - "8000:8000"
+    command: sphinx-autobuild . ./_build/html --host 0.0.0.0

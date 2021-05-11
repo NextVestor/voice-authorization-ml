@@ -52,10 +52,15 @@ def features():
     """
     url = request.args.get('url')
     dtln_on = request.args.get('dtln', default=True)
+    mean_on = request.args.get('mean', default=False)
     record, sample_rate = audio_featurizer.read_file_by_url(url)
     if dtln_on:
         record = dtln_proc.process_record(record, sample_rate)
-    all_features = audio_featurizer.get_all_features_limited(record, sample_rate)
+    if mean_on:
+        all_features = audio_featurizer.get_all_features_mean_limited(record, sample_rate)
+    else:
+        # TODO: change logic (mean as parameter?)
+        all_features = audio_featurizer.get_all_features_limited(record, sample_rate)
     all_features = audio_featurizer.features_to_json_serializable(all_features)
     result = dict(features=all_features)
     return jsonify(result)

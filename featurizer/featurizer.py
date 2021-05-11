@@ -1,4 +1,5 @@
 import io
+import math
 import uuid
 from pathlib import Path
 from urllib.request import urlopen
@@ -186,6 +187,33 @@ class AudioFeaturizer():
 
         :return: Dictionary of all features
         """
+        all_features = self.get_all_features(record, sample_rate, normalize_dim=True)
+        for feature_name in all_features:
+            if feature_name in self.names_to_norm:
+                all_features[feature_name] = all_features[feature_name][:self.feature_len]
+        return all_features
+
+    def get_all_features_mean_limited(self, record, sample_rate=16000, chunk_len=5):
+        chunks_amount = math.floor(len(record)/sample_rate/chunk_len)
+        features_sets = {
+            'd_vector': [],
+            'mfcc': [],
+            'lfcc': [],
+            'pncc': []
+        }
+        for i in range(chunks_amount):
+            record_chunk = record[i*sample_rate*chunk_len:(i+1)*sample_rate*chunk_len]
+            chunk_all_features = self.get_all_features(record_chunk, sample_rate, normalize_dim=True)
+            for feature_name in chunk_all_features:
+                features_sets[feature_name].append(chunk_all_features[feature_name])
+        all_features = {
+            'd_vector': None,
+            'mfcc': None,
+            'lfcc': None,
+            'pncc': None
+        }
+        for feature_name in all_features:
+            all_features[feature_name] = np.mean(features_sets[feature_name], axis=0)
         all_features = self.get_all_features(record, sample_rate, normalize_dim=True)
         for feature_name in all_features:
             if feature_name in self.names_to_norm:

@@ -1,6 +1,8 @@
 version: "3.8"
 services:
   api:
+    image: base
     build: .
     ports:
       - "5000:5000"
+    command: flask run
